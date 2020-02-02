@@ -1,0 +1,35 @@
+body {
+  background-color: aliceblue;
+  text-align: center;
+  font-family: sans-serif;
+}
+h1 {
+  text-align: center;
+}
+#list {
+  display: flex;
+  /* flex-wrap: wrap; */
+  flex-direction: column;
+  margin: 0 auto;
+  width: 80%;
+  overflow: scroll;
+  height: 500px;
+  /* need to set the vertical height */
+}
+.todo {
+  background-color: lavender;
+  text-align: center;
+  width: 80%;
+  margin: 0 auto;
+  padding: 3px;
+  border: 3px solid whitesmoke;
+}
+form {
+  display: inline-block;
+}
+button {
+  float: right;
+}
+.todo:hover {
+  opacity: 0.8;
+}

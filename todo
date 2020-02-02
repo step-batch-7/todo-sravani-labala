@@ -1,0 +1,18 @@
+requirements:-
+  1) Create one or more to-do list with a title
+  2) View all the to-do lists
+  3) Add an item to a to-do list
+  4) Delete an item from to-do list
+  5) Mark an item as done and undone
+  6) Delete a todo list
+
+---------------------------------------------
+
+need to make of the format of the todo display
+need to think of the format of storing the todo list
+
+need to connect to the server
+need to make the index.html
+
+need to have the test folders
+----------------------------------------------

@@ -1,0 +1,8 @@
+body {
+  background-color: aliceblue;
+  text-align: center;
+  font-family: sans-serif;
+}
+form {
+  display: inline-block;
+}
