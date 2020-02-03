@@ -1,12 +1,3 @@
-const createTitle = function() {
-  const todoTitle = document.createElement('input');
-  todoTitle.setAttribute('placeholder', 'title');
-  todoTitle.setAttribute('name', 'title');
-  todoTitle.setAttribute('type', 'text');
-  todoTitle.setAttribute('required', true);
-  return todoTitle;
-};
-
 const createList = function() {
   const todoList = document.createElement('input');
   todoList.setAttribute('placeholder', 'list...');
@@ -16,25 +7,9 @@ const createList = function() {
   return todoList;
 };
 
-const setForm = function() {
-  const container = document.getElementById('container');
-  const form = document.createElement('form');
-  form.setAttribute('method', 'POST');
-
-  const todoItem = document.createElement('input');
-  todoItem.setAttribute('value', 'add');
-  todoItem.setAttribute('type', 'submit');
-
-  form.appendChild(createTitle());
-  form.appendChild(createList());
-  form.appendChild(todoItem);
-
-  container.appendChild(form);
-};
-
 const generateLists = function(list) {
   return list.map(function({ point }) {
-    return `<input type='checkbox'>${point}</input>`;
+    return `<input type='checkbox'>${point}</input></br>`;
   });
 };
 
@@ -43,15 +18,27 @@ const generateHtml = function(html, task) {
   <div class="task" >
     <div class="title">
       <h3>${task.title}</h3>
-      <button id=${task.id} onclick="addList()">+</button>
+      <button id=${task.id} onclick="addList()">undone</button>
     </div>
-    <div>${generateLists(task.list)}
+    <div>${generateLists(task.list).join('')}
     </div>
-    <div id="a-${task.id}" class="subTodo">add sub todo
+    <div id="a-${task.id}" class="subTodo">done should occur
     </div>
   </div>
 `;
   return formattedHtml + html;
+};
+
+const postHttpMsg = function(url, callback, message) {
+  const req = new XMLHttpRequest();
+  req.onload = function() {
+    if (this.status === statusCodes.OK) {
+      callback(this.responseText);
+    }
+  };
+  req.open('POST', url);
+  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  req.send(message);
 };
 
 const sendHttpGet = (url, callback) => {
@@ -76,20 +63,43 @@ const loadTasks = function() {
 };
 
 const main = function() {
-  setForm();
   loadTasks();
+  attachListener();
 };
 
 const addList = function() {
-  if (document.getElementById(event.target.id).innerText === '+') {
+  if (document.getElementById(event.target.id).innerText === 'undone') {
     const form = document.getElementById(`a-${event.target.id}`);
     form.style.display = 'block';
-
-    document.getElementById(event.target.id).innerText = '-';
+    document.getElementById(event.target.id).innerText = 'done';
     return;
   }
   const form = document.getElementById(`a-${event.target.id}`);
   form.style.display = 'none';
+  document.getElementById(event.target.id).innerText = 'undone';
+};
 
-  document.getElementById(event.target.id).innerText = '+';
+const add = function() {
+  document.getElementById('addTodo').style.display = 'block';
+};
+
+const close = function() {
+  document.getElementById('addTodo').style.display = 'none';
+};
+
+const addSubList = function() {
+  const form = document.getElementById('form');
+  form.appendChild(createList());
+};
+
+const deleteSubList = function() {
+  const form = document.getElementById('form');
+  const list = document.querySelectorAll('[name="list"]');
+  const getLastIndex = 1;
+  form.removeChild(list[list.length - getLastIndex]);
+};
+
+const attachListener = function() {
+  const button = document.querySelector('#close');
+  button.addEventListener('click', close);
 };

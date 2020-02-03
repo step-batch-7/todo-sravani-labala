@@ -58,13 +58,22 @@ const serveTasksList = function(req, res, next) {
   res.end(fs.readFileSync(path));
 };
 
+const generateLists = function(lists) {
+  const formattedLists = new Array(lists).flat();
+  const list = [];
+  formattedLists.forEach(function(l) {
+    return list.push({ point: l, status: false });
+  });
+  return list;
+};
+
 const addNewTodo = function(req, res) {
   const { title, list } = req.body;
   const previousTodo = JSON.parse(fs.readFileSync(dataStore));
   previousTodo.push({
     id: previousTodo.length,
     title,
-    list: [{ point: list, status: false }]
+    list: generateLists(list)
   });
   fs.writeFileSync(dataStore, JSON.stringify(previousTodo));
   res.setHeader('Content-Type', CONTENT_TYPES.html);

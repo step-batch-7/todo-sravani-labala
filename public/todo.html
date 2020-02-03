@@ -10,7 +10,33 @@
   </head>
   <body onload="main()">
     <h1>TODO</h1>
-    <div id="container"></div>
+    <div id="container">
+      <button id="add" onclick="add()">add</button>
+      <div id="addTodo">
+        <div id="form-content">
+          <button id="close">cancel</button>
+          <form method="POST">
+            <div id="form">
+              <input
+                placeholder="title"
+                name="title"
+                type="text"
+                required="true"
+              />
+              <input
+                placeholder="list..."
+                name="list"
+                type="text"
+                required="true"
+              />
+            </div>
+            <input value="done" type="submit" />
+            <button id="add" onclick="addSubList()">add</button>
+            <button id="delete" onclick="deleteSubList()">delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
     <div id="todo-list"></div>
   </body>
 </html>
