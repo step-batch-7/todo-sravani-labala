@@ -13,6 +13,12 @@ describe('GET method for pages', function() {
       .get('/notFoundFile')
       .expect(404, done);
   });
+  it('should give the dataBase of the app', function(done) {
+    request(app.serve.bind(app))
+      .get('/test/resource/todoList.json')
+      .expect('Content-Type', 'application/json')
+      .expect(200, done);
+  });
 });
 
 describe('Method Not Allowed', function() {

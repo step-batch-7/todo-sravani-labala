@@ -58,13 +58,13 @@ const serveTasksList = function(req, res, next) {
   res.end(fs.readFileSync(path));
 };
 
-const generateLists = function(lists) {
-  const formattedLists = new Array(lists).flat();
-  const list = [];
-  formattedLists.forEach(function(l) {
-    return list.push({ point: l, status: false });
+const generateLists = function(unformattedList) {
+  const arrayFormLists = new Array(unformattedList).flat();
+  const lists = [];
+  arrayFormLists.forEach(function(list) {
+    return lists.push({ point: list, status: false });
   });
-  return list;
+  return lists;
 };
 
 const addNewTodo = function(req, res) {

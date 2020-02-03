@@ -45,7 +45,8 @@ h3 {
   flex-direction: column;
 }
 /* pop up */
-#addTodo {
+#addTodo,
+.display {
   display: none;
   position: fixed;
   padding-top: 100px;
@@ -63,10 +64,12 @@ h3 {
   border: 1px solid #888;
   width: 80%;
 }
-#close {
+#close,
+.close {
   float: right;
 }
 #close:hover,
-#close:focus {
+#close:focus,
+.close :hover {
   cursor: pointer;
 }

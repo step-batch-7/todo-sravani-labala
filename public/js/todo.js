@@ -1,3 +1,9 @@
+const show = element => {
+  document.querySelector(element).style.display = 'block';
+};
+const hide = element => {
+  document.querySelector(element).style.display = 'none';
+};
 const createList = function() {
   const todoList = document.createElement('input');
   todoList.setAttribute('placeholder', 'list...');
@@ -15,14 +21,18 @@ const generateLists = function(list) {
 
 const generateHtml = function(html, task) {
   const formattedHtml = `
-  <div class="task" >
+  <div class="task" id="t-${task.id}>
     <div class="title">
-      <h3>${task.title}</h3>
+      <h3 onclick="show('.display')" id="t-${task.id}">${task.title}</h3>
       <button id=${task.id} onclick="addList()">undone</button>
     </div>
     <div>${generateLists(task.list).join('')}
     </div>
     <div id="a-${task.id}" class="subTodo">done should occur
+    </div>
+    <div class="display" id="t-${task.id}">
+    <button class="close" onclick="hide('.display')">cancel</button>
+    <div>${generateLists(task.list).join('')}
     </div>
   </div>
 `;
@@ -79,27 +89,22 @@ const addList = function() {
   document.getElementById(event.target.id).innerText = 'undone';
 };
 
-const add = function() {
-  document.getElementById('addTodo').style.display = 'block';
-};
-
-const close = function() {
-  document.getElementById('addTodo').style.display = 'none';
-};
-
 const addSubList = function() {
   const form = document.getElementById('form');
   form.appendChild(createList());
 };
 
 const deleteSubList = function() {
+  const getLastIndex = 1;
+  if (document.querySelectorAll('[name="list"]').length === getLastIndex) {
+    return alert('click cancel to go back');
+  }
   const form = document.getElementById('form');
   const list = document.querySelectorAll('[name="list"]');
-  const getLastIndex = 1;
   form.removeChild(list[list.length - getLastIndex]);
 };
 
 const attachListener = function() {
   const button = document.querySelector('#close');
-  button.addEventListener('click', close);
+  button.addEventListener('click', () => hide('#addTodo'));
 };
