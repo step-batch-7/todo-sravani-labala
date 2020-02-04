@@ -39,10 +39,16 @@ describe('GET method for css', function() {
 });
 
 describe('POST method', function() {
-  it('should redirect to the main page', function(done) {
+  it('should redirect on adding the item to the main page', function(done) {
     request(app.serve.bind(app))
       .post('/')
       .send('title=title&todoItem=1')
+      .expect(303, done);
+  });
+  it('should redirect on deleting the item to the main page', function(done) {
+    request(app.serve.bind(app))
+      .post('/removeItem')
+      .send('id=0&title=0')
       .expect(303, done);
   });
 });
