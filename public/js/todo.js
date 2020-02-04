@@ -20,11 +20,11 @@ const createList = function() {
 const generateLists = function(list, title) {
   return list.map(function({ point }, index) {
     return `
-    <div id="${title}">
+    <div id="${title}" class="tasks">
       <input type='checkbox'>${point}
-        <span onclick="deleteItem()" id="${index}"> delete 
-        </span>
       </input>
+      <button onclick="deleteItem()" id="${index}"> delete 
+      </button>
       </br>
   </div>`;
   });
@@ -36,11 +36,13 @@ const generateHtml = function(html, task, index) {
     <div class="task"  id="d${index}">
       <div class="title">
         <h3 onclick="show('#d${index}.display')">${title}</h3>
+        <span class="delete" onclick="deleteTodo()">delete</span>
       </div>
     </div> 
+
     <div class="display" id="d${index}">
       <button class="close" onclick="hide('#d${index}.display')">cancel</button>
-        <div>${generateLists(task.list, index).join('')}
+        <div >${generateLists(task.list, index).join('')}
         </div>
     </div>
   `;
@@ -109,6 +111,16 @@ const deleteItem = function() {
     '/removeItem',
     loadTasks,
     `title=${event.target.parentNode.id}&id=${event.target.id}`
+  );
+  const itemToList = event.target.parentNode;
+  itemToList.parentNode.removeChild(itemToList);
+};
+
+const deleteTodo = function() {
+  postHttpMsg(
+    '/removeTodo',
+    loadTasks,
+    `title=${event.target.parentNode.parentNode.id}`
   );
   const itemToList = event.target.parentNode;
   itemToList.parentNode.removeChild(itemToList);

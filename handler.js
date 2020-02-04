@@ -83,8 +83,15 @@ const removeTodoItem = function(req, res) {
   const previousTasks = JSON.parse(fs.readFileSync(dataStore));
   previousTasks[title].list.splice(id, till);
   fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
-  res.setHeader('Content-Type', CONTENT_TYPES.html);
-  res.writeHead(statusCodes.redirecting, { location: '/todo.html' });
+  res.end();
+};
+
+const removeTodo = function(req, res) {
+  const { title } = req.body;
+  const till = 1;
+  const previousTasks = JSON.parse(fs.readFileSync(dataStore));
+  previousTasks.splice(title.slice(till), till);
+  fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
   res.end();
 };
 
@@ -94,6 +101,7 @@ app.use(readBody);
 app.get('', serveStaticFile);
 app.get('/tasks', serveTasksList);
 app.post('/removeItem', removeTodoItem);
+app.post('/removeTodo', removeTodo);
 app.post('/', addNewTodo);
 app.get('', notFound);
 app.use(methodNotAllowed);

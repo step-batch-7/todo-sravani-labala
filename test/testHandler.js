@@ -45,10 +45,16 @@ describe('POST method', function() {
       .send('title=title&todoItem=1')
       .expect(303, done);
   });
-  it('should redirect on deleting the item to the main page', function(done) {
+  it('should delete particular item in the task', function(done) {
     request(app.serve.bind(app))
       .post('/removeItem')
       .send('id=0&title=0')
-      .expect(303, done);
+      .expect(200, done);
+  });
+  it('should delete the particular task ', function(done) {
+    request(app.serve.bind(app))
+      .post('/removeTodo')
+      .send('title=0')
+      .expect(200, done);
   });
 });
