@@ -17,32 +17,32 @@ const createList = function() {
   return todoList;
 };
 
-const generateLists = function(list, title) {
-  return list.map(function({ point }, index) {
+const generateLists = function(list) {
+  return list.map(function({ point, status }, index) {
     return `
-    <div id="${title}" class="tasks">
-      <input type='checkbox'>${point}
-      </input>
-      <button onclick="deleteItem()" id="${index}"> delete 
+    <div id="${index}" class="tasks">
+      <p>${point}</p>
+      <button onclick="deleteItem()" > delete 
       </button>
       </br>
+      <button onclick="done()">${status}</button>
   </div>`;
   });
 };
 
 const generateHtml = function(html, task, index) {
-  const title = `${task.title}`;
   const formattedHtml = `
     <div class="task"  id="d${index}">
       <div class="title">
-        <h3 onclick="show('#d${index}.display')">${title}</h3>
+        <h3 onclick="show('#d${index}.display')">${task.title}</h3>
         <span class="delete" onclick="deleteTodo()">delete</span>
-      </div>
-    </div> 
+        </div>
+    </div>
 
     <div class="display" id="d${index}">
       <button class="close" onclick="hide('#d${index}.display')">cancel</button>
-        <div >${generateLists(task.list, index).join('')}
+      <button id="add" onclick="addList()">add</button>
+        <div id="${index}">${generateLists(task.list).join('')}
         </div>
     </div>
   `;
@@ -107,21 +107,32 @@ const attachListener = function() {
 };
 
 const deleteItem = function() {
-  postHttpMsg(
-    '/removeItem',
-    loadTasks,
-    `title=${event.target.parentNode.id}&id=${event.target.id}`
-  );
-  const itemToList = event.target.parentNode;
-  itemToList.parentNode.removeChild(itemToList);
+  const [, index, title] = event.path;
+  postHttpMsg('/removeItem', loadTasks, `title=${title.id}&id=${index.id}`);
+  title.removeChild(index);
 };
 
 const deleteTodo = function() {
-  postHttpMsg(
-    '/removeTodo',
-    loadTasks,
-    `title=${event.target.parentNode.parentNode.id}`
-  );
-  const itemToList = event.target.parentNode;
-  itemToList.parentNode.removeChild(itemToList);
+  const [, todo, task] = event.path;
+  postHttpMsg('/removeTodo', loadTasks, `title=${task.id}`);
+  task.removeChild(todo);
+};
+
+const done = function() {
+  const [, index, title] = event.path;
+  postHttpMsg('/changeStatus', loadTasks, `title=${title.id}&id=${index.id}`);
+  event.target.innerHTML = !event.target.innerHTML;
+};
+
+const createForm = function() {
+  const form = document.createElement('form');
+  form.setAttribute('method', 'POST');
+  form.appendChild(createList());
+  return form;
+};
+
+const addList = function() {
+  const till = 1;
+  const [, task] = event.path;
+  document.getElementById(task.id.slice(till)).appendChild(createForm());
 };

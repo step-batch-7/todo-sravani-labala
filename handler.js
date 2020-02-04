@@ -95,6 +95,14 @@ const removeTodo = function(req, res) {
   res.end();
 };
 
+const changeStatus = function(req, res) {
+  const { title, id } = req.body;
+  const previousTasks = JSON.parse(fs.readFileSync(dataStore));
+  previousTasks[title].list[id].status = !previousTasks[title].list[id].status;
+  fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
+  res.end();
+};
+
 const app = new App();
 
 app.use(readBody);
@@ -102,6 +110,7 @@ app.get('', serveStaticFile);
 app.get('/tasks', serveTasksList);
 app.post('/removeItem', removeTodoItem);
 app.post('/removeTodo', removeTodo);
+app.post('/changeStatus', changeStatus);
 app.post('/', addNewTodo);
 app.get('', notFound);
 app.use(methodNotAllowed);

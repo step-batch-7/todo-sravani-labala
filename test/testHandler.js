@@ -45,6 +45,12 @@ describe('POST method', function() {
       .send('title=title&todoItem=1')
       .expect(303, done);
   });
+  it('should mark the checkbox item in the task', function(done) {
+    request(app.serve.bind(app))
+      .post('/changeStatus')
+      .send('id=0&title=0')
+      .expect(200, done);
+  });
   it('should delete particular item in the task', function(done) {
     request(app.serve.bind(app))
       .post('/removeItem')
