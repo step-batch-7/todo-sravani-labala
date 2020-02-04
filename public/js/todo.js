@@ -15,7 +15,7 @@ const createList = function() {
 
 const generateLists = function(list) {
   return list.map(function({ point }) {
-    return `<input type='checkbox'>${point}</input></br>`;
+    return `<div><input type='checkbox'>${point}<span onclick="deleteItem()"> delete </span></input></br></div>`;
   });
 };
 
@@ -26,7 +26,6 @@ const generateHtml = function(html, task) {
       <h3 onclick="show('.display')" id="t-${task.id}">${task.title}</h3>
       <button id=${task.id} onclick="addList()">undone</button>
     </div>
-    <div>${generateLists(task.list).join('')}
     </div>
     <div id="a-${task.id}" class="subTodo">done should occur
     </div>
@@ -107,4 +106,9 @@ const deleteSubList = function() {
 const attachListener = function() {
   const button = document.querySelector('#close');
   button.addEventListener('click', () => hide('#addTodo'));
+};
+
+const deleteItem = function() {
+  const itemToList = event.target.parentNode;
+  itemToList.parentNode.removeChild(itemToList);
 };

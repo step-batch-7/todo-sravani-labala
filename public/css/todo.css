@@ -7,10 +7,6 @@ body {
 h1 {
   display: inline-block;
 }
-#container {
-  display: flex;
-  justify-content: center;
-}
 #todo-list {
   /* background-color: lavender; */
   background-color: #f0f0f0;
