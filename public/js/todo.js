@@ -1,9 +1,13 @@
+const status = { ok: 200 };
+
 const show = element => {
   document.querySelector(element).style.display = 'block';
 };
+
 const hide = element => {
   document.querySelector(element).style.display = 'none';
 };
+
 const createList = function() {
   const todoList = document.createElement('input');
   todoList.setAttribute('placeholder', 'list...');
@@ -13,35 +17,40 @@ const createList = function() {
   return todoList;
 };
 
-const generateLists = function(list) {
-  return list.map(function({ point }) {
-    return `<div><input type='checkbox'>${point}<span onclick="deleteItem()"> delete </span></input></br></div>`;
+const generateLists = function(list, title) {
+  return list.map(function({ point }, index) {
+    return `
+    <div id="${title}">
+      <input type='checkbox'>${point}
+        <span onclick="deleteItem()" id="${index}"> delete 
+        </span>
+      </input>
+      </br>
+  </div>`;
   });
 };
 
-const generateHtml = function(html, task) {
+const generateHtml = function(html, task, index) {
+  const title = `${task.title}`;
   const formattedHtml = `
-  <div class="task" id="t-${task.id}>
-    <div class="title">
-      <h3 onclick="show('.display')" id="t-${task.id}">${task.title}</h3>
-      <button id=${task.id} onclick="addList()">undone</button>
+    <div class="task"  id="d${index}">
+      <div class="title">
+        <h3 onclick="show('#d${index}.display')">${title}</h3>
+      </div>
+    </div> 
+    <div class="display" id="d${index}">
+      <button class="close" onclick="hide('#d${index}.display')">cancel</button>
+        <div>${generateLists(task.list, index).join('')}
+        </div>
     </div>
-    </div>
-    <div id="a-${task.id}" class="subTodo">done should occur
-    </div>
-    <div class="display" id="t-${task.id}">
-    <button class="close" onclick="hide('.display')">cancel</button>
-    <div>${generateLists(task.list).join('')}
-    </div>
-  </div>
-`;
+  `;
   return formattedHtml + html;
 };
 
 const postHttpMsg = function(url, callback, message) {
   const req = new XMLHttpRequest();
   req.onload = function() {
-    if (this.status === statusCodes.OK) {
+    if (this.status === status.ok) {
       callback(this.responseText);
     }
   };
@@ -53,8 +62,7 @@ const postHttpMsg = function(url, callback, message) {
 const sendHttpGet = (url, callback) => {
   const req = new XMLHttpRequest();
   req.onload = function() {
-    const ok = 200;
-    if (this.status === ok) {
+    if (this.status === status.ok) {
       callback(this.responseText);
     }
   };
@@ -63,7 +71,7 @@ const sendHttpGet = (url, callback) => {
 };
 
 const loadTasks = function() {
-  sendHttpGet('/dataBase/todoList.json', text => {
+  sendHttpGet('/tasks', text => {
     const todoLists = document.getElementById('todo-list');
     const tasks = JSON.parse(text);
     const tasksHtml = tasks.reduce(generateHtml, '');
@@ -74,18 +82,6 @@ const loadTasks = function() {
 const main = function() {
   loadTasks();
   attachListener();
-};
-
-const addList = function() {
-  if (document.getElementById(event.target.id).innerText === 'undone') {
-    const form = document.getElementById(`a-${event.target.id}`);
-    form.style.display = 'block';
-    document.getElementById(event.target.id).innerText = 'done';
-    return;
-  }
-  const form = document.getElementById(`a-${event.target.id}`);
-  form.style.display = 'none';
-  document.getElementById(event.target.id).innerText = 'undone';
 };
 
 const addSubList = function() {
@@ -109,6 +105,11 @@ const attachListener = function() {
 };
 
 const deleteItem = function() {
+  postHttpMsg(
+    '/removeItem',
+    loadTasks,
+    `title=${event.target.parentNode.id}&id=${event.target.id}`
+  );
   const itemToList = event.target.parentNode;
   itemToList.parentNode.removeChild(itemToList);
 };

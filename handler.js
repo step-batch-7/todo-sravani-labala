@@ -26,6 +26,7 @@ const serveStaticFile = (req, res, next) => {
   if (!fs.existsSync(dataStore)) {
     fs.writeFileSync(dataStore, '[]');
   }
+
   if (req.url === '/') {
     req.url = '/todo.html';
   }
@@ -49,13 +50,9 @@ const readBody = function(req, res, next) {
   });
 };
 
-const serveTasksList = function(req, res, next) {
-  const path = `${__dirname}${req.url}`;
-  if (path !== dataStore) {
-    next();
-  }
+const serveTasksList = function(req, res) {
   res.setHeader('Content-Type', CONTENT_TYPES.json);
-  res.end(fs.readFileSync(path));
+  res.end(fs.readFileSync(dataStore));
 };
 
 const generateLists = function(unformattedList) {
@@ -71,7 +68,6 @@ const addNewTodo = function(req, res) {
   const { title, list } = req.body;
   const previousTodo = JSON.parse(fs.readFileSync(dataStore));
   previousTodo.push({
-    id: previousTodo.length,
     title,
     list: generateLists(list)
   });
@@ -81,11 +77,23 @@ const addNewTodo = function(req, res) {
   res.end();
 };
 
+const removeTodoItem = function(req, res) {
+  const till = 1;
+  const { id, title } = req.body;
+  const previousTasks = JSON.parse(fs.readFileSync(dataStore));
+  previousTasks[title].list.splice(id, till);
+  fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
+  res.setHeader('Content-Type', CONTENT_TYPES.html);
+  res.writeHead(statusCodes.redirecting, { location: '/todo.html' });
+  res.end();
+};
+
 const app = new App();
 
 app.use(readBody);
 app.get('', serveStaticFile);
-app.get('/todoList.json', serveTasksList);
+app.get('/tasks', serveTasksList);
+app.post('/removeItem', removeTodoItem);
 app.post('/', addNewTodo);
 app.get('', notFound);
 app.use(methodNotAllowed);

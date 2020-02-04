@@ -15,7 +15,7 @@ describe('GET method for pages', function() {
   });
   it('should give the dataBase of the app', function(done) {
     request(app.serve.bind(app))
-      .get('/test/resource/todoList.json')
+      .get('/tasks')
       .expect('Content-Type', 'application/json')
       .expect(200, done);
   });
