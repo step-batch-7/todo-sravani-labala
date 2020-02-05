@@ -20,12 +20,11 @@ const createList = function() {
 const generateLists = function(list) {
   return list.map(function({ point, status }, index) {
     return `
-    <div id="${index}" class="tasks">
-      <p>${point}</p>
-      <button onclick="deleteItem()" > delete 
-      </button>
-      </br>
-      <button onclick="done()">${status}</button>
+  <div id="${index}" class="tasks">
+    <button onclick="done()">${status}</button>
+    <p>${point}</p>
+    <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteItem()"/>
+    </br>
   </div>`;
   });
 };
@@ -36,18 +35,18 @@ const generateHtml = function(html, task, index) {
     <div id="d${index}">
       <div class="title">
         <h3 onclick="show('#d${index}.listBlock')">${task.title}</h3>
-        <span class="delete" onclick="deleteTodo()">delete</span>
-        </div>
+        <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
+      </div>
     </div>
-<div class="listBlock" id="d${index}">
-    <div class="display" >
- <button class="close" onclick="hide('#d${index}.listBlock')">cancel</button>
-      <button onclick="addList()">add</button>
-        <div id="${index}">${generateLists(task.list).join('')}
-        </div>
+    <div class="listBlock" id="d${index}">
+      <div class="display" >
+        <img src="https://svgsilh.com/svg/294245.svg" alt="cancelImg" onclick="hide('#d${index}.listBlock')" class="close"/>
+        <button onclick="addList()">add</button>
+          <div id="${index}">${generateLists(task.list).join('')}
+          </div>
+      </div>
     </div>
-    </div>
-    </div>
+  </div>
   `;
   return formattedHtml + html;
 };

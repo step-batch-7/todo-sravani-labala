@@ -9,32 +9,36 @@
     <link rel="stylesheet" href="css/todo.css" />
   </head>
   <body>
-    <h1>TASK<span>MANAGER</span></h1>
+    <h1>TASK <span>MANAGER</span></h1>
     <button id="add" onclick="show('#addTodo')">
       add your todo
     </button>
     <div>
       <div id="addTodo" class="listBlock">
         <div class="display">
-          <button onclick="cancel()">cancel</button>
+          <img
+            src="https://svgsilh.com/svg/294245.svg"
+            alt="cancelImg"
+            onclick="cancel()"
+            class="close"
+          />
           <div>
             <div id="form">
-              <input
-                placeholder="title"
-                name="title"
-                type="text"
-                required="true"
-              />
-              <input
-                placeholder="list..."
-                name="list"
-                type="text"
-                required="true"
-              />
+              <input placeholder="title" name="title" type="text" />
+              <input placeholder="list..." name="list" type="text" />
             </div>
             <button onclick="saveList()">done</button>
-            <button onclick="addSubList()">add</button>
-            <button onclick="deleteSubList()">delete</button>
+            <img
+              src="https://static.thenounproject.com/png/145052-200.png"
+              alt="addImg"
+              onclick="addSubList()"
+            />
+            <img
+              src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png"
+              alt="deleteImg"
+              class="delete"
+              onclick="deleteSubList()"
+            />
           </div>
         </div>
       </div>
