@@ -41,9 +41,9 @@ describe('GET method for css', function() {
 describe('POST method', function() {
   it('should redirect on adding the item to the main page', function(done) {
     request(app.serve.bind(app))
-      .post('/')
+      .post('/saveTodo')
       .send('title=title&todoItem=1')
-      .expect(303, done);
+      .expect(200, done);
   });
   it('should mark the checkbox item in the task', function(done) {
     request(app.serve.bind(app))

@@ -72,23 +72,19 @@ const sendHttpGet = (url, callback) => {
   req.send();
 };
 
-const loadTasks = function() {
-  sendHttpGet('/tasks', text => {
-    const todoLists = document.getElementById('todo-list');
-    const tasks = JSON.parse(text);
-    const tasksHtml = tasks.reduce(generateHtml, '');
-    todoLists.innerHTML = tasksHtml;
-  });
+const load = function(text) {
+  const todoLists = document.getElementById('todo-list');
+  const tasks = JSON.parse(text);
+  const tasksHtml = tasks.reduce(generateHtml, '');
+  todoLists.innerHTML = tasksHtml;
 };
 
 const main = function() {
-  loadTasks();
-  attachListener();
+  sendHttpGet('/tasks', load);
 };
 
-const addSubList = function() {
-  const form = document.getElementById('form');
-  form.appendChild(createList());
+const addSubList = () => {
+  document.getElementById('form').appendChild(createList());
 };
 
 const deleteSubList = function() {
@@ -101,26 +97,21 @@ const deleteSubList = function() {
   form.removeChild(list[list.length - getLastIndex]);
 };
 
-const attachListener = function() {
-  const button = document.querySelector('#close');
-  button.addEventListener('click', () => hide('#addTodo'));
-};
-
 const deleteItem = function() {
   const [, index, title] = event.path;
-  postHttpMsg('/removeItem', loadTasks, `title=${title.id}&id=${index.id}`);
+  postHttpMsg('/removeItem', load, `title=${title.id}&id=${index.id}`);
   title.removeChild(index);
 };
 
 const deleteTodo = function() {
   const [, todo, task] = event.path;
-  postHttpMsg('/removeTodo', loadTasks, `title=${task.id}`);
+  postHttpMsg('/removeTodo', load, `title=${task.id}`);
   task.removeChild(todo);
 };
 
 const done = function() {
   const [, index, title] = event.path;
-  postHttpMsg('/changeStatus', loadTasks, `title=${title.id}&id=${index.id}`);
+  postHttpMsg('/changeStatus', load, `title=${title.id}&id=${index.id}`);
   event.target.innerHTML = !event.target.innerHTML;
 };
 
@@ -136,3 +127,23 @@ const addList = function() {
   const [, task] = event.path;
   document.getElementById(task.id.slice(till)).appendChild(createForm());
 };
+
+const saveList = function() {
+  let list = Array.from(document.getElementById('form').children);
+  const title = list.shift();
+  list = list.map(item => {
+    const value = item.value;
+    item.value = '';
+    return value;
+  });
+  postHttpMsg('/saveTodo', load, `title=${title.value}&list=${list}`);
+  title.value = '';
+};
+
+const cancel = function() {
+  document.querySelector('#addTodo').style.display = 'none';
+  const list = Array.from(document.getElementById('form').children);
+  list.map(item => (item.value = ''));
+};
+
+window.onload = main;

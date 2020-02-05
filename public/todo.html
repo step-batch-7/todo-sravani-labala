@@ -8,14 +8,16 @@
     <script src="js/todo.js"></script>
     <link rel="stylesheet" href="css/todo.css" />
   </head>
-  <body onload="main()">
-    <h1>TODO</h1>
+  <body>
+    <h1>TASK<span>MANAGER</span></h1>
+    <button id="add" onclick="show('#addTodo')">
+      add your todo
+    </button>
     <div>
-      <button id="add" onclick="show('#addTodo')">add</button>
       <div id="addTodo">
         <div id="form-content">
-          <button id="close">cancel</button>
-          <form method="POST">
+          <button onclick="cancel()">cancel</button>
+          <div>
             <div id="form">
               <input
                 placeholder="title"
@@ -30,10 +32,10 @@
                 required="true"
               />
             </div>
-            <input value="done" type="submit" />
-            <button id="add" onclick="addSubList()">add</button>
-            <button id="delete" onclick="deleteSubList()">delete</button>
-          </form>
+            <button onclick="saveList()">done</button>
+            <button onclick="addSubList()">add</button>
+            <button onclick="deleteSubList()">delete</button>
+          </div>
         </div>
       </div>
     </div>

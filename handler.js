@@ -72,9 +72,7 @@ const addNewTodo = function(req, res) {
     list: generateLists(list)
   });
   fs.writeFileSync(dataStore, JSON.stringify(previousTodo));
-  res.setHeader('Content-Type', CONTENT_TYPES.html);
-  res.writeHead(statusCodes.redirecting, { location: '/todo.html' });
-  res.end();
+  res.end(JSON.stringify(previousTodo));
 };
 
 const removeTodoItem = function(req, res) {
@@ -83,7 +81,7 @@ const removeTodoItem = function(req, res) {
   const previousTasks = JSON.parse(fs.readFileSync(dataStore));
   previousTasks[title].list.splice(id, till);
   fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
-  res.end();
+  res.end(JSON.stringify(previousTasks));
 };
 
 const removeTodo = function(req, res) {
@@ -92,7 +90,7 @@ const removeTodo = function(req, res) {
   const previousTasks = JSON.parse(fs.readFileSync(dataStore));
   previousTasks.splice(title.slice(till), till);
   fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
-  res.end();
+  res.end(JSON.stringify(previousTasks));
 };
 
 const changeStatus = function(req, res) {
@@ -100,7 +98,7 @@ const changeStatus = function(req, res) {
   const previousTasks = JSON.parse(fs.readFileSync(dataStore));
   previousTasks[title].list[id].status = !previousTasks[title].list[id].status;
   fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
-  res.end();
+  res.end(JSON.stringify(previousTasks));
 };
 
 const app = new App();
@@ -111,7 +109,7 @@ app.get('/tasks', serveTasksList);
 app.post('/removeItem', removeTodoItem);
 app.post('/removeTodo', removeTodo);
 app.post('/changeStatus', changeStatus);
-app.post('/', addNewTodo);
+app.post('/saveTodo', addNewTodo);
 app.get('', notFound);
 app.use(methodNotAllowed);
 
