@@ -26,7 +26,6 @@ const serveStaticFile = (req, res, next) => {
   if (!fs.existsSync(dataStore)) {
     fs.writeFileSync(dataStore, '[]');
   }
-
   if (req.url === '/') {
     req.url = '/todo.html';
   }

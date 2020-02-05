@@ -32,18 +32,21 @@ const generateLists = function(list) {
 
 const generateHtml = function(html, task, index) {
   const formattedHtml = `
-    <div class="task"  id="d${index}">
+  <div>
+    <div id="d${index}">
       <div class="title">
-        <h3 onclick="show('#d${index}.display')">${task.title}</h3>
+        <h3 onclick="show('#d${index}.listBlock')">${task.title}</h3>
         <span class="delete" onclick="deleteTodo()">delete</span>
         </div>
     </div>
-
-    <div class="display" id="d${index}">
-      <button class="close" onclick="hide('#d${index}.display')">cancel</button>
-      <button id="add" onclick="addList()">add</button>
+<div class="listBlock" id="d${index}">
+    <div class="display" >
+ <button class="close" onclick="hide('#d${index}.listBlock')">cancel</button>
+      <button onclick="addList()">add</button>
         <div id="${index}">${generateLists(task.list).join('')}
         </div>
+    </div>
+    </div>
     </div>
   `;
   return formattedHtml + html;
@@ -128,22 +131,34 @@ const addList = function() {
   document.getElementById(task.id.slice(till)).appendChild(createForm());
 };
 
+const isTodo = function(todoList) {
+  return todoList.some(list => {
+    return list.value.trim() === '';
+  });
+};
+
 const saveList = function() {
   let list = Array.from(document.getElementById('form').children);
-  const title = list.shift();
+  if (isTodo(list)) {
+    alert('enter title and fill the list');
+    return;
+  }
+  const title = list.shift().value;
   list = list.map(item => {
     const value = item.value;
-    item.value = '';
-    return value;
+    return `list=${value}`;
   });
-  postHttpMsg('/saveTodo', load, `title=${title.value}&list=${list}`);
-  title.value = '';
+  cancel();
+  postHttpMsg('/saveTodo', load, `title=${title}&${list.join('&')}`);
 };
 
 const cancel = function() {
   document.querySelector('#addTodo').style.display = 'none';
-  const list = Array.from(document.getElementById('form').children);
-  list.map(item => (item.value = ''));
+  const form = document.getElementById('form');
+  const list = Array.from(form.children);
+  list.shift().value = '';
+  list.shift().value = '';
+  list.map(item => form.removeChild(item));
 };
 
 window.onload = main;

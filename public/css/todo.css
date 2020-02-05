@@ -3,51 +3,56 @@ body {
   font-family: sans-serif;
   background-color: whitesmoke;
 }
+/* all the inputs */
 input {
   font-size: 15px;
   margin: 2px;
 }
-h3 {
-  padding-left: 10px;
-}
+/* division of the todo list in the front page */
 #todo-list {
-  width: 80%;
+  width: 50%;
   display: inline-block;
-  height: 500px;
+  height: 600px;
   overflow: scroll;
 }
-.task:hover {
-  opacity: 0.5;
-}
+/* each list in the division of the front page */
 .title {
   display: flex;
   justify-content: space-between;
   border: 1px solid black;
   margin-top: 10px;
   border-radius: 5px;
-  padding-right: 10px;
+  padding: 10px;
 }
-.subTodo {
-  display: none;
+/* on hover the particular title becomes little dim */
+.title:hover {
+  opacity: 0.5;
 }
+/* for displaying title in the front page */
+h3 {
+  width: 90%;
+  word-wrap: break-word;
+  text-align: left;
+}
+/* for add option in the front page */
 #add {
   float: center;
   font-size: 15px;
 }
+/* this is for the todo form for entering */
 #form {
   display: flex;
   flex-direction: column;
 }
-.tasks {
+/* .tasks {
   display: flex;
   padding-left: 100px;
-}
+} */
 .delete {
   padding-top: 20px;
 }
 /* pop up */
-#addTodo,
-.display {
+.listBlock {
   display: none;
   position: fixed;
   padding-top: 100px;
@@ -57,9 +62,9 @@ h3 {
   height: 100%;
   overflow: auto;
   background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
 }
-#form-content {
+.display {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
