@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mkdir test/resource ;export DATA_STORE=$(pwd)/test/resource/todoList.json; nyc mocha; rm -rf test/resource ",
+    "test": "mkdir -p test/resource ;export DATA_STORE=$(pwd)/test/resource/todoList.json; nyc mocha; rm -rf test/resource ",
     "start": "mkdir -p dataBase;export DATA_STORE=$(pwd)/dataBase/todoList.json;node server.js"
   },
   "repository": {

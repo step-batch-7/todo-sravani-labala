@@ -17,33 +17,32 @@ const createList = function() {
   return todoList;
 };
 
+const getStatus = function(status) {
+  return status ? 'done' : 'undone';
+};
+
 const generateLists = function(list) {
   return list.map(function({ point, status }, index) {
     return `
   <div id="${index}" class="tasks">
-    <button onclick="done()">${status}</button>
+    <button onclick="done()">${getStatus(status)}</button> 
     <p>${point}</p>
     <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteItem()"/>
-    </br>
   </div>`;
   });
 };
 
 const generateHtml = function(html, task, index) {
   const formattedHtml = `
-  <div>
-    <div id="d${index}">
-      <div class="title">
-        <h3 onclick="show('#d${index}.listBlock')">${task.title}</h3>
-        <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
-      </div>
-    </div>
-    <div class="listBlock" id="d${index}">
-      <div class="display" >
-        <img src="https://svgsilh.com/svg/294245.svg" alt="cancelImg" onclick="hide('#d${index}.listBlock')" class="close"/>
-        <button onclick="addList()">add</button>
-          <div id="${index}">${generateLists(task.list).join('')}
-          </div>
+  <div id="d${index}" class="title" onclick="show('#d${index}.listBlock')">
+   ${task.title}
+    <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
+  </div>
+  <div class="listBlock" id="d${index}">
+    <div class="display" >
+      <img src="https://svgsilh.com/svg/294245.svg" alt="cancelImg" onclick="hide('#d${index}.listBlock')" class="close"/>
+      <button onclick="addList()">add</button>
+      <div id="${index}">${generateLists(task.list).join('')}
       </div>
     </div>
   </div>
@@ -114,7 +113,10 @@ const deleteTodo = function() {
 const done = function() {
   const [, index, title] = event.path;
   postHttpMsg('/changeStatus', load, `title=${title.id}&id=${index.id}`);
-  event.target.innerHTML = !event.target.innerHTML;
+  if (event.target.innerText === 'done') {
+    return (event.target.innerText = 'undone');
+  }
+  event.target.innerText = 'done';
 };
 
 const createForm = function() {

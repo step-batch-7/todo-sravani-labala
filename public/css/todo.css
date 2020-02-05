@@ -27,16 +27,13 @@ input {
   margin-top: 10px;
   border-radius: 5px;
   padding: 10px;
+  font-weight: bolder;
+  font-size: large;
+  word-wrap: break-word;
 }
 /* on hover the particular title becomes little dim */
 .title:hover {
   opacity: 0.5;
-}
-/* for displaying title in the front page */
-h3 {
-  width: 90%;
-  word-wrap: break-word;
-  text-align: left;
 }
 /* for add option in the front page */
 #add {
@@ -84,6 +81,7 @@ h3 {
   border: 1px solid #888;
   width: 50%;
 }
+/* for overall the images */
 img {
   height: 35px;
 }
