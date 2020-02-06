@@ -112,6 +112,7 @@ img:focus,
   border: 1px solid #888;
   width: 50%;
 }
+/* in add option in the existing list */
 .display > img {
   height: 20px;
 }

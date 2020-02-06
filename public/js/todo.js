@@ -150,7 +150,7 @@ const cancel = function() {
 
 const addSubItem = function() {
   let item = event.target.nextElementSibling.value;
-  const [, , , title] = event.path;
+  const [, , title] = event.path;
   if (item.trim() === '') {
     return alert('enter value in the list box to add');
   }
