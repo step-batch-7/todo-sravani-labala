@@ -25,7 +25,7 @@ const generateLists = function(list) {
       <input type="checkbox" ${getStatus}  onclick="done()"/>
       ${point}
     </div>
-    <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteItem()"/>
+    <img src="./images/deleteIcon.png" alt="deleteImg" class="delete" onclick="deleteItem()"/>
   </div>`;
   });
 };
@@ -34,12 +34,13 @@ const generateHtml = function(html, task, index) {
   const formattedHtml = `
   <div id="d${index}" class="title" onclick="show('#d${index}.listBlock')">
     ${task.title}
-    <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
+    <img src="./images/deleteIcon.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
   </div>
   <div class="listBlock" id="d${index}">
     <div class="display" >
       <p onclick="hide('#d${index}.listBlock')" class="close">&#10008;</p>
-      </br>
+      <img src="./images/plus.png" alt="addImg" onclick="addSubItem()"/>
+      <input placeholder="List..." name="subList" type="text"></input>
       <div id="${index}">${generateLists(task.list).join('')}
       </div>
     </div>
@@ -145,6 +146,16 @@ const cancel = function() {
   list.shift().value = '';
   list.shift().value = '';
   list.map(item => form.removeChild(item));
+};
+
+const addSubItem = function() {
+  let item = event.target.nextElementSibling.value;
+  const [, , , title] = event.path;
+  if (item.trim() === '') {
+    return alert('enter value in the list box to add');
+  }
+  postHttpMsg('/addSubList', load, `title=${title.id.slice(1)}&item=${item}`);
+  item = '';
 };
 
 window.onload = main;

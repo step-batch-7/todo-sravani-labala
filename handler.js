@@ -100,11 +100,20 @@ const changeStatus = function(req, res) {
   res.end(JSON.stringify(previousTasks));
 };
 
+const addSubList = function(req, res) {
+  const { title, item } = req.body;
+  const previousTasks = JSON.parse(fs.readFileSync(dataStore));
+  previousTasks[title].list.push({ point: item, status: false });
+  fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
+  res.end(JSON.stringify(previousTasks));
+};
+
 const app = new App();
 
 app.use(readBody);
 app.get('', serveStaticFile);
 app.get('/tasks', serveTasksList);
+app.post('/addSubList', addSubList);
 app.post('/removeItem', removeTodoItem);
 app.post('/removeTodo', removeTodo);
 app.post('/changeStatus', changeStatus);

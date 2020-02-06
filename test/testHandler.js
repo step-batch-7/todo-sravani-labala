@@ -42,25 +42,42 @@ describe('POST method', function() {
   it('should redirect on adding the item to the main page', function(done) {
     request(app.serve.bind(app))
       .post('/saveTodo')
-      .send('title=title&todoItem=1')
+      .send('title=title&todoItem=something')
+      .expect('[{"title":"title","list":[{"status":false}]}]')
+      .expect(200, done);
+  });
+  it('should add new item in the existing task', function(done) {
+    request(app.serve.bind(app))
+      .post('/addSubList')
+      .send('item=something&title=0')
+      .expect(
+        '[{"title":"title","list":[{"status":false},{"point":"something","status":false}]}]'
+      )
       .expect(200, done);
   });
   it('should mark the checkbox item in the task', function(done) {
     request(app.serve.bind(app))
       .post('/changeStatus')
       .send('id=0&title=0')
+      .expect(
+        '[{"title":"title","list":[{"status":true},{"point":"something","status":false}]}]'
+      )
       .expect(200, done);
   });
   it('should delete particular item in the task', function(done) {
     request(app.serve.bind(app))
       .post('/removeItem')
       .send('id=0&title=0')
+      .expect(
+        '[{"title":"title","list":[{"point":"something","status":false}]}]'
+      )
       .expect(200, done);
   });
   it('should delete the particular task ', function(done) {
     request(app.serve.bind(app))
       .post('/removeTodo')
       .send('title=0')
+      .expect('[]')
       .expect(200, done);
   });
 });
