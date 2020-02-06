@@ -5,7 +5,7 @@ body {
 }
 /* for overall the images */
 img {
-  height: 35px;
+  height: 25px;
 }
 /* for the heading*/
 h1 > span {
@@ -39,6 +39,7 @@ input {
 .title:hover,
 .tasks:hover {
   opacity: 0.5;
+  background-color: wheat;
 }
 /* for add option in the front page */
 #add {
@@ -52,6 +53,7 @@ input {
 }
 /* for the delete icon */
 .delete {
+  padding: 3px;
   height: 20px;
 }
 /* this is used for closing in the lists divisions */

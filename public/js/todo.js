@@ -13,7 +13,6 @@ const createList = function() {
   todoList.setAttribute('placeholder', 'list...');
   todoList.setAttribute('name', 'list');
   todoList.setAttribute('type', 'text');
-  todoList.setAttribute('required', true);
   return todoList;
 };
 
@@ -42,7 +41,7 @@ const generateHtml = function(html, task, index) {
   <div class="listBlock" id="d${index}">
     <div class="display" >
       <img src="https://svgsilh.com/svg/294245.svg" alt="cancelImg" onclick="hide('#d${index}.listBlock')" class="close"/>
-      <button onclick="addList()">add</button>
+      </br>
       <div id="${index}">${generateLists(task.list).join('')}
       </div>
     </div>
@@ -121,19 +120,6 @@ const done = function() {
   event.target.innerText = 'done';
 };
 
-const createForm = function() {
-  const form = document.createElement('form');
-  form.setAttribute('method', 'POST');
-  form.appendChild(createList());
-  return form;
-};
-
-const addList = function() {
-  const till = 1;
-  const [, task] = event.path;
-  document.getElementById(task.id.slice(till)).appendChild(createForm());
-};
-
 const isTodo = function(todoList) {
   return todoList.some(list => {
     return list.value.trim() === '';
@@ -148,8 +134,7 @@ const saveList = function() {
   }
   const title = list.shift().value;
   list = list.map(item => {
-    const value = item.value;
-    return `list=${value}`;
+    return `list=${item.value}`;
   });
   cancel();
   postHttpMsg('/saveTodo', load, `title=${title}&${list.join('&')}`);
