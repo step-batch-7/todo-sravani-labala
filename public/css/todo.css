@@ -32,7 +32,7 @@ input {
   border-radius: 5px;
   padding: 10px;
   font-weight: bolder;
-  font-size: large;
+  font-size: larger;
   word-wrap: break-word;
 }
 /* on hover the particular title and particular item becomes little dim */
@@ -40,6 +40,23 @@ input {
 .tasks:hover {
   opacity: 0.5;
   background-color: wheat;
+}
+/* on hover the delete option will be visible */
+.title:hover > .delete,
+.tasks:hover > .delete {
+  display: block;
+}
+/* to display the lists in the todo */
+.tasks {
+  display: flex;
+  padding-left: 50px;
+  justify-content: space-between;
+}
+/* for the delete icon */
+.delete {
+  display: none;
+  padding: 3px;
+  height: 15px;
 }
 /* for add option in the front page */
 #add {
@@ -51,21 +68,10 @@ input {
   display: flex;
   flex-direction: column;
 }
-/* for the delete icon */
-.delete {
-  padding: 3px;
-  height: 20px;
-}
 /* this is used for closing in the lists divisions */
 .close {
   float: right;
   height: 15px;
-}
-/* to display the lists in the todo */
-.tasks {
-  display: flex;
-  padding-left: 50px;
-  justify-content: space-between;
 }
 /* to display the item in that list */
 .tasks > div {
