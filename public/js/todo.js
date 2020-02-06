@@ -18,15 +18,16 @@ const createList = function() {
 };
 
 const getStatus = function(status) {
-  return status ? 'done' : 'undone';
+  return status ? 'checked' : '';
 };
 
 const generateLists = function(list) {
   return list.map(function({ point, status }, index) {
     return `
-  <div id="${index}" class="tasks">
-    <button onclick="done()">${getStatus(status)}</button> 
-    <p>${point}</p>
+  <div id=${index} class="tasks">
+  <div>
+    <input type="checkbox" ${getStatus(status)}  onclick="done()"/>${point}
+    </div>
     <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteItem()"/>
   </div>`;
   });
@@ -105,16 +106,17 @@ const deleteItem = function() {
 };
 
 const deleteTodo = function() {
-  const [, todo, task] = event.path;
+  const [todo, task] = event.path;
   postHttpMsg('/removeTodo', load, `title=${task.id}`);
   task.removeChild(todo);
 };
 
 const done = function() {
-  const [, index, title] = event.path;
+  const [, , index, title] = event.path;
   postHttpMsg('/changeStatus', load, `title=${title.id}&id=${index.id}`);
   if (event.target.innerText === 'done') {
-    return (event.target.innerText = 'undone');
+    event.target.innerText = 'undone';
+    return;
   }
   event.target.innerText = 'done';
 };

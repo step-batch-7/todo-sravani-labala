@@ -3,6 +3,10 @@ body {
   font-family: sans-serif;
   background-color: whitesmoke;
 }
+/* for overall the images */
+img {
+  height: 35px;
+}
 /* for the heading*/
 h1 > span {
   font-weight: 500;
@@ -31,8 +35,9 @@ input {
   font-size: large;
   word-wrap: break-word;
 }
-/* on hover the particular title becomes little dim */
-.title:hover {
+/* on hover the particular title and particular item becomes little dim */
+.title:hover,
+.tasks:hover {
   opacity: 0.5;
 }
 /* for add option in the front page */
@@ -47,7 +52,7 @@ input {
 }
 /* for the delete icon */
 .delete {
-  height: 35px;
+  height: 20px;
 }
 /* this is used for closing in the lists divisions */
 .close {
@@ -57,7 +62,12 @@ input {
 /* to display the lists in the todo */
 .tasks {
   display: flex;
-  padding-left: 100px;
+  padding-left: 50px;
+  justify-content: space-between;
+}
+/* to display the item in that list */
+.tasks > div {
+  padding-top: 10px;
 }
 /* pop up */
 /* background of the popup display */
@@ -75,13 +85,9 @@ input {
 }
 /* on background the content box to display */
 .display {
-  background-color: #fefefe;
+  background-color: whitesmoke;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
   width: 50%;
-}
-/* for overall the images */
-img {
-  height: 35px;
 }
