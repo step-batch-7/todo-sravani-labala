@@ -22,7 +22,8 @@ const generateLists = function(list) {
     return `
   <div id=${index} class="tasks">
     <div>
-      <input type="checkbox" ${getStatus}  onclick="done()"/>${point}
+      <input type="checkbox" ${getStatus}  onclick="done()"/>
+      ${point}
     </div>
     <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteItem()"/>
   </div>`;
@@ -37,7 +38,7 @@ const generateHtml = function(html, task, index) {
   </div>
   <div class="listBlock" id="d${index}">
     <div class="display" >
-      <img src="https://svgsilh.com/svg/294245.svg" alt="cancelImg" onclick="hide('#d${index}.listBlock')" class="close"/>
+      <p onclick="hide('#d${index}.listBlock')" class="close">&#10008;</p>
       </br>
       <div id="${index}">${generateLists(task.list).join('')}
       </div>

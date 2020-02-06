@@ -16,6 +16,13 @@ input {
   font-size: 15px;
   margin: 2px;
 }
+/* for the input tag to enter the title and list */
+#form > input {
+  width: 600px;
+  height: 25px;
+  margin-left: 40px;
+  padding: 3px;
+}
 /* division of the todo list in the front page */
 #todo-list {
   width: 50%;
@@ -71,7 +78,14 @@ input {
 /* this is used for closing in the lists divisions */
 .close {
   float: right;
-  height: 15px;
+  margin-top: 0px;
+}
+/* for all the icons on hover and on focus the pointer will be displayed on it */
+img:hover,
+img:focus,
+.close:hover,
+.close:focus {
+  cursor: pointer;
 }
 /* to display the item in that list */
 .tasks > div {
