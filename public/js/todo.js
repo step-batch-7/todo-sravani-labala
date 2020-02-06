@@ -16,16 +16,13 @@ const createList = function() {
   return todoList;
 };
 
-const getStatus = function(status) {
-  return status ? 'checked' : '';
-};
-
 const generateLists = function(list) {
   return list.map(function({ point, status }, index) {
+    const getStatus = status ? 'checked' : '';
     return `
   <div id=${index} class="tasks">
-  <div>
-    <input type="checkbox" ${getStatus(status)}  onclick="done()"/>${point}
+    <div>
+      <input type="checkbox" ${getStatus}  onclick="done()"/>${point}
     </div>
     <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteItem()"/>
   </div>`;
@@ -35,7 +32,7 @@ const generateLists = function(list) {
 const generateHtml = function(html, task, index) {
   const formattedHtml = `
   <div id="d${index}" class="title" onclick="show('#d${index}.listBlock')">
-   ${task.title}
+    ${task.title}
     <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/delete-1432400-1211078.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
   </div>
   <div class="listBlock" id="d${index}">
