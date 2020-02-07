@@ -18,14 +18,14 @@ input {
 }
 /* for the input tag to enter the title and list */
 #form > input {
-  width: 600px;
+  width: 500px;
   height: 25px;
   margin-left: 40px;
   padding: 3px;
 }
 /* division of the todo list in the front page */
 #todo-list {
-  width: 50%;
+  width: 40%;
   display: inline-block;
   height: 600px;
   overflow: scroll;
@@ -45,7 +45,6 @@ input {
 /* on hover the particular title and particular item becomes little dim */
 .title:hover,
 .tasks:hover {
-  opacity: 0.5;
   background-color: wheat;
 }
 /* on hover the delete option will be visible */
@@ -110,7 +109,7 @@ img:focus,
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 50%;
+  width: 40%;
 }
 /* in add option in the existing list */
 .display > img {

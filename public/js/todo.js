@@ -39,8 +39,8 @@ const generateHtml = function(html, task, index) {
   <div class="listBlock" id="d${index}">
     <div class="display" >
       <p onclick="hide('#d${index}.listBlock')" class="close">&#10008;</p>
+      <input placeholder="List..." name="subList" type="text" onkeypress="addList()"></input>
       <img src="./images/plus.png" alt="addImg" onclick="addSubItem()"/>
-      <input placeholder="List..." name="subList" type="text"></input>
       <div id="${index}">${generateLists(task.list).join('')}
       </div>
     </div>
@@ -149,13 +149,20 @@ const cancel = function() {
 };
 
 const addSubItem = function() {
-  let item = event.target.nextElementSibling.value;
+  let item = event.target.previousElementSibling.value;
   const [, , title] = event.path;
   if (item.trim() === '') {
     return alert('enter value in the list box to add');
   }
   postHttpMsg('/addSubList', load, `title=${title.id.slice(1)}&item=${item}`);
   item = '';
+};
+
+const addList = function() {
+  const enterKeyValue = 13;
+  if (event.keyCode === enterKeyValue) {
+    document.querySelector('[onclick="addSubItem()"]').click();
+  }
 };
 
 window.onload = main;
