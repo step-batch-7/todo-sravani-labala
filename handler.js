@@ -7,6 +7,8 @@ const statusCodes = { badRequest: 400, notFound: 404, redirecting: 303 };
 const config = require('./config');
 const dataStore = config.DATA_STORE;
 
+const { TodoList } = require('./lib/todoList');
+
 const notFound = function(req, res) {
   res.writeHead(statusCodes.notFound);
   res.end();
@@ -23,9 +25,6 @@ const validatePath = function(path) {
 };
 
 const serveStaticFile = (req, res, next) => {
-  if (!fs.existsSync(dataStore)) {
-    fs.writeFileSync(dataStore, '[]');
-  }
   if (req.url === '/') {
     req.url = '/todo.html';
   }
@@ -49,63 +48,54 @@ const readBody = function(req, res, next) {
   });
 };
 
-const serveTasksList = function(req, res) {
-  res.setHeader('Content-Type', CONTENT_TYPES.json);
-  res.end(fs.readFileSync(dataStore));
+const readFile = () =>
+  fs.existsSync(dataStore) ? fs.readFileSync(dataStore, 'utf8') : '[]';
+
+const writeFile = function(content) {
+  fs.writeFileSync(dataStore, content);
 };
 
-const generateLists = function(unformattedList) {
-  const arrayFormLists = new Array(unformattedList).flat();
-  const lists = [];
-  arrayFormLists.forEach(function(list) {
-    return lists.push({ point: list, status: false });
-  });
-  return lists;
+const todoLists = TodoList.load(readFile());
+const one = 1;
+
+const serveTasksList = function(req, res) {
+  writeFile(todoLists.toJSON());
+  res.setHeader('Content-Type', CONTENT_TYPES.json);
+  res.end(todoLists.toJSON());
 };
 
 const addNewTodo = function(req, res) {
   const { title, list } = req.body;
-  const previousTodo = JSON.parse(fs.readFileSync(dataStore));
-  previousTodo.push({
-    title,
-    list: generateLists(list)
+  let lists = new Array(list).flat();
+  lists = lists.map(point => {
+    return { point, status: false };
   });
-  fs.writeFileSync(dataStore, JSON.stringify(previousTodo));
-  res.end(JSON.stringify(previousTodo));
-};
-
-const removeTodoItem = function(req, res) {
-  const till = 1;
-  const { id, title } = req.body;
-  const previousTasks = JSON.parse(fs.readFileSync(dataStore));
-  previousTasks[title].list.splice(id, till);
-  fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
-  res.end(JSON.stringify(previousTasks));
+  todoLists.addTodo({ title, list: lists });
+  serveTasksList(req, res);
 };
 
 const removeTodo = function(req, res) {
   const { title } = req.body;
-  const till = 1;
-  const previousTasks = JSON.parse(fs.readFileSync(dataStore));
-  previousTasks.splice(title.slice(till), till);
-  fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
-  res.end(JSON.stringify(previousTasks));
+  todoLists.removeTodo(title.slice(one));
+  serveTasksList(req, res);
+};
+
+const removeTodoItem = function(req, res) {
+  const { id, title } = req.body;
+  todoLists.removeTodoTask(title, id);
+  serveTasksList(req, res);
 };
 
 const changeStatus = function(req, res) {
   const { title, id } = req.body;
-  const previousTasks = JSON.parse(fs.readFileSync(dataStore));
-  previousTasks[title].list[id].status = !previousTasks[title].list[id].status;
-  fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
-  res.end(JSON.stringify(previousTasks));
+  todoLists.changeStatusOfTask(title, id);
+  serveTasksList(req, res);
 };
 
 const addSubList = function(req, res) {
   const { title, item } = req.body;
-  const previousTasks = JSON.parse(fs.readFileSync(dataStore));
-  previousTasks[title].list.push({ point: item, status: false });
-  fs.writeFileSync(dataStore, JSON.stringify(previousTasks));
-  res.end(JSON.stringify(previousTasks));
+  todoLists.addList(title, item);
+  serveTasksList(req, res);
 };
 
 const app = new App();
