@@ -115,3 +115,11 @@ img:focus,
 .display > img {
   height: 20px;
 }
+p {
+  text-align: left;
+  padding: 0px;
+  margin: 0px;
+}
+hr {
+  padding: 0px;
+}

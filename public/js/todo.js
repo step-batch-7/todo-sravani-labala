@@ -114,10 +114,35 @@ const generateLists = function(list) {
   });
 };
 
-const displayLists = function(index, list) {
+// const displayLists = function(index, list) {
+//   return `
+// <div class="display" id="inner${index}" >
+//   <p onclick="hide('#d${index}.listBlock')" class="close">&#10008;</p>
+//   <input placeholder="List..." name="subList" type="text" onkeypress="addList()" id="i${index}"></input>
+//   <img src="./images/plus.png" alt="addImg" onclick="addSubItem()"/>
+//   ${generateLists(list).join('')}
+// </div>`;
+// };
+
+// const generateHtml = function(html, task, index) {
+//   const formattedHtml = `
+//   <div id="d${index}" class="title" onclick="show('#d${index}.listBlock')">
+//     ${task.title}
+//     <img src="./images/deleteIcon.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
+//   </div>
+//   <div class="listBlock" id="d${index}">
+//     ${displayLists(index, task.list)}
+//   </div>
+//   `;
+//   return formattedHtml + html;
+// };
+
+const displayLists = function(index, list, title) {
   return `
 <div class="display" id="inner${index}" >
-  <p onclick="hide('#d${index}.listBlock')" class="close">&#10008;</p>
+<p><b>${title}</b>
+  <span onclick="hide('#d${index}.listBlock')" class="close">&#10008;</span></p>
+  <hr/>
   <input placeholder="List..." name="subList" type="text" onkeypress="addList()" id="i${index}"></input>
   <img src="./images/plus.png" alt="addImg" onclick="addSubItem()"/>
   ${generateLists(list).join('')}
@@ -131,17 +156,28 @@ const generateHtml = function(html, task, index) {
     <img src="./images/deleteIcon.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
   </div>
   <div class="listBlock" id="d${index}">
-    ${displayLists(index, task.list)}
+    ${displayLists(index, task.list, task.title)}
   </div>
   `;
   return formattedHtml + html;
 };
 
+// const loadLists = function(text, index) {
+//   const tasks = JSON.parse(text);
+//   const todoLists = document.querySelector(`#inner${index}.display`)
+//     .parentElement;
+//   todoLists.innerHTML = displayLists(index, tasks[index].list);
+// };
+
 const loadLists = function(text, index) {
   const tasks = JSON.parse(text);
   const todoLists = document.querySelector(`#inner${index}.display`)
     .parentElement;
-  todoLists.innerHTML = displayLists(index, tasks[index].list);
+  todoLists.innerHTML = displayLists(
+    index,
+    tasks[index].list,
+    tasks[index].title
+  );
 };
 
 const addSubItem = function() {
