@@ -6,7 +6,6 @@ const STATIC_FOLDER = `${__dirname}/public`;
 const statusCodes = { badRequest: 400, notFound: 404, redirecting: 303 };
 const config = require('./config');
 const dataStore = config.DATA_STORE;
-
 const { TodoList } = require('./lib/todoList');
 
 const notFound = function(req, res) {

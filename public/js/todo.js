@@ -1,4 +1,5 @@
 const status = { ok: 200 };
+const one = 1;
 
 const show = element => {
   document.querySelector(element).style.display = 'block';
@@ -14,39 +15,6 @@ const createList = function() {
   todoList.setAttribute('name', 'list');
   todoList.setAttribute('type', 'text');
   return todoList;
-};
-
-const generateLists = function(list) {
-  return list.map(function({ point, status }, index) {
-    const getStatus = status ? 'checked' : '';
-    return `
-  <div id=${index} class="tasks">
-    <div>
-      <input type="checkbox" ${getStatus}  onclick="done()"/>
-      ${point}
-    </div>
-    <img src="./images/deleteIcon.png" alt="deleteImg" class="delete" onclick="deleteItem()"/>
-  </div>`;
-  });
-};
-
-const generateHtml = function(html, task, index) {
-  const formattedHtml = `
-  <div id="d${index}" class="title" onclick="show('#d${index}.listBlock')">
-    ${task.title}
-    <img src="./images/deleteIcon.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
-  </div>
-  <div class="listBlock" id="d${index}">
-    <div class="display" >
-      <p onclick="hide('#d${index}.listBlock')" class="close">&#10008;</p>
-      <input placeholder="List..." name="subList" type="text" onkeypress="addList()"></input>
-      <img src="./images/plus.png" alt="addImg" onclick="addSubItem()"/>
-      <div id="${index}">${generateLists(task.list).join('')}
-      </div>
-    </div>
-  </div>
-  `;
-  return formattedHtml + html;
 };
 
 const postHttpMsg = function(url, callback, message) {
@@ -97,26 +65,10 @@ const deleteSubList = function() {
   form.removeChild(list[list.length - getLastIndex]);
 };
 
-const deleteItem = function() {
-  const [, index, title] = event.path;
-  postHttpMsg('/removeItem', load, `title=${title.id}&id=${index.id}`);
-  title.removeChild(index);
-};
-
 const deleteTodo = function() {
   const [todo, task] = event.path;
   postHttpMsg('/removeTodo', load, `title=${task.id}`);
   task.removeChild(todo);
-};
-
-const done = function() {
-  const [, , index, title] = event.path;
-  postHttpMsg('/changeStatus', load, `title=${title.id}&id=${index.id}`);
-  if (event.target.innerText === 'done') {
-    event.target.innerText = 'undone';
-    return;
-  }
-  event.target.innerText = 'done';
 };
 
 const isTodo = function(todoList) {
@@ -148,21 +100,86 @@ const cancel = function() {
   list.map(item => form.removeChild(item));
 };
 
+const generateLists = function(list) {
+  return list.map(function({ point, status }, index) {
+    const getStatus = status ? 'checked' : '';
+    return `
+  <div id=${index} class="tasks">
+    <div>
+      <input type="checkbox" ${getStatus}  onclick="done()"/>
+      ${point}
+    </div>
+    <img src="./images/deleteIcon.png" alt="deleteImg" class="delete" onclick="deleteItem()"/>
+  </div>`;
+  });
+};
+
+const displayLists = function(index, list) {
+  return `
+<div class="display" id="inner${index}" >
+  <p onclick="hide('#d${index}.listBlock')" class="close">&#10008;</p>
+  <input placeholder="List..." name="subList" type="text" onkeypress="addList()" id="i${index}"></input>
+  <img src="./images/plus.png" alt="addImg" onclick="addSubItem()"/>
+  ${generateLists(list).join('')}
+</div>`;
+};
+
+const generateHtml = function(html, task, index) {
+  const formattedHtml = `
+  <div id="d${index}" class="title" onclick="show('#d${index}.listBlock')">
+    ${task.title}
+    <img src="./images/deleteIcon.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
+  </div>
+  <div class="listBlock" id="d${index}">
+    ${displayLists(index, task.list)}
+  </div>
+  `;
+  return formattedHtml + html;
+};
+
+const loadLists = function(text, index) {
+  const tasks = JSON.parse(text);
+  const todoLists = document.querySelector(`#inner${index}.display`)
+    .parentElement;
+  todoLists.innerHTML = displayLists(index, tasks[index].list);
+};
+
 const addSubItem = function() {
-  let item = event.target.previousElementSibling.value;
+  const item = event.target.previousElementSibling.value;
   const [, , title] = event.path;
   if (item.trim() === '') {
     return alert('enter value in the list box to add');
   }
-  postHttpMsg('/addSubList', load, `title=${title.id.slice(1)}&item=${item}`);
-  item = '';
+  postHttpMsg(
+    '/addSubList',
+    text => loadLists(text, title.id.slice(one)),
+    `title=${title.id.slice(one)}&item=${item}`
+  );
 };
 
 const addList = function() {
   const enterKeyValue = 13;
   if (event.keyCode === enterKeyValue) {
-    document.querySelector('[onclick="addSubItem()"]').click();
+    document.getElementById(event.target.id).nextElementSibling.click();
   }
+};
+
+const done = function() {
+  const [, , index, , title] = event.path;
+  postHttpMsg(
+    '/changeStatus',
+    text => loadLists(text, title.id.slice(one)),
+    `title=${title.id.slice(one)}&id=${index.id}`
+  );
+};
+
+const deleteItem = function() {
+  const [, index, , title] = event.path;
+  postHttpMsg(
+    '/removeItem',
+    text => loadLists(text, title.id.slice(one)),
+    `title=${title.id.slice(one)}&id=${index.id}`
+  );
 };
 
 window.onload = main;
