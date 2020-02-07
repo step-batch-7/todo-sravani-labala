@@ -115,11 +115,13 @@ img:focus,
 .display > img {
   height: 20px;
 }
+/* for paragraphs */
 p {
   text-align: left;
   padding: 0px;
   margin: 0px;
 }
+/* for the horizontal line */
 hr {
   padding: 0px;
 }
