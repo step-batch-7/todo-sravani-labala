@@ -11,7 +11,7 @@ const hide = element => {
 
 const createList = function() {
   const todoList = document.createElement('input');
-  todoList.setAttribute('placeholder', 'list...');
+  todoList.setAttribute('placeholder', 'task...');
   todoList.setAttribute('name', 'list');
   todoList.setAttribute('type', 'text');
   return todoList;
@@ -117,10 +117,10 @@ const generateLists = function(list) {
 const displayLists = function(index, list, title) {
   return `
 <div class="display" id="inner${index}" >
-<p><b>${title}</b>
-  <span onclick="hide('#d${index}.listBlock')" class="close">&#10008;</span></p>
+  <p><b>${title}</b>
+  <span onclick="closeTask('#d${index}.listBlock')" class="close">&#10008;</span></p>
   <hr/>
-  <input placeholder="List..." name="subList" type="text" onkeypress="addList()" id="i${index}"></input>
+  <input placeholder="task..." name="subList" type="text" onkeypress="addList()" id="i${index}">
   <img src="./images/plus.png" alt="addImg" onclick="addSubItem()"/>
   ${generateLists(list).join('')}
 </div>`;
@@ -186,6 +186,11 @@ const deleteItem = function() {
     text => loadLists(text, title.id.slice(one)),
     `title=${title.id.slice(one)}&id=${index.id}`
   );
+};
+
+const closeTask = function(task) {
+  hide(task);
+  document.querySelector(task).children[0].children[2].value = '';
 };
 
 window.onload = main;

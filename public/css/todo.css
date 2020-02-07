@@ -15,6 +15,7 @@ h1 > span {
 input {
   font-size: 15px;
   margin: 2px;
+  outline: none;
 }
 /* for the input tag to enter the title and list */
 #form > input {
@@ -50,7 +51,7 @@ input {
 /* on hover the delete option will be visible */
 .title:hover > .delete,
 .tasks:hover > .delete {
-  display: block;
+  visibility: visible;
 }
 /* to display the lists in the todo */
 .tasks {
@@ -60,7 +61,7 @@ input {
 }
 /* for the delete icon */
 .delete {
-  display: none;
+  visibility: hidden;
   padding: 3px;
   height: 15px;
 }
