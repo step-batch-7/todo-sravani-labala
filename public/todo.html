@@ -21,16 +21,19 @@
             <input placeholder="title" name="title" type="text" />
             <input placeholder="task..." name="list" type="text" />
           </div>
-          <img src="./images/tick.png" alt="doneImg" onclick="saveList()" />
-          <img src="./images/plus.png" alt="addImg" onclick="addSubList()" />
-          <img
-            src="./images/deleteIcon.png"
-            alt="deleteImg"
-            onclick="deleteSubList()"
-          />
+          <button onclick="saveList()">
+            <img src="./images/tick.png" alt="doneImg" />
+          </button>
+          <button onclick="addSubList()">
+            <img src="./images/plus.png" alt="addImg" />
+          </button>
+          <button onclick="deleteSubList()">
+            <img src="./images/delete-forever.png" alt="deleteImg" />
+          </button>
         </div>
       </div>
     </div>
+    <hr />
     <div id="todo-list"></div>
   </body>
 </html>

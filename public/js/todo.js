@@ -65,12 +65,6 @@ const deleteSubList = function() {
   form.removeChild(list[list.length - getLastIndex]);
 };
 
-const deleteTodo = function() {
-  const [todo, task] = event.path;
-  postHttpMsg('/removeTodo', load, `title=${task.id}`);
-  task.removeChild(todo);
-};
-
 const isTodo = function(todoList) {
   return todoList.some(list => {
     return list.value.trim() === '';
@@ -100,6 +94,86 @@ const cancel = function() {
   list.map(item => form.removeChild(item));
 };
 
+const done = function() {
+  event.stopPropagation();
+  const [, , index, , title] = event.path;
+  postHttpMsg(
+    '/changeStatus',
+    text => {
+      loadLists(text, title.id.slice(one));
+      if (title.classList[0] === 'title') {
+        load(text);
+      }
+    },
+    `title=${title.id.slice(one)}&id=${index.id}`
+  );
+};
+
+const closeTask = function(task) {
+  hide(task);
+  main();
+  document.querySelector(task).children[0].children[2].value = '';
+};
+
+const deleteItem = function() {
+  event.stopPropagation();
+  const [, , index, , title] = event.path;
+  postHttpMsg(
+    '/removeItem',
+    text => {
+      loadLists(text, title.id.slice(one));
+      if (title.classList[0] === 'title') {
+        load(text);
+      }
+    },
+    `title=${title.id.slice(one)}&id=${index.id}`
+  );
+};
+
+const addSubItem = function() {
+  event.stopPropagation();
+  const item = event.target.previousElementSibling.value;
+  const [, , title] = event.path;
+  if (item.trim() === '') {
+    return alert('enter value in the list box to add');
+  }
+  postHttpMsg(
+    '/addSubList',
+    text => {
+      loadLists(text, title.id.slice(one));
+      if (title.classList[0] === 'title') {
+        load(text);
+      }
+    },
+    `title=${title.id.slice(one)}&item=${item}`
+  );
+};
+
+const loadLists = function(text, index) {
+  const tasks = JSON.parse(text);
+  const todoLists = document.querySelector(`#inner${index}.display`)
+    .parentElement;
+  todoLists.innerHTML = displayLists(
+    index,
+    tasks[index].list,
+    tasks[index].title
+  );
+};
+
+const addList = function() {
+  const enterKeyValue = 13;
+  if (event.keyCode === enterKeyValue) {
+    document.getElementById(event.target.id).nextElementSibling.click();
+  }
+};
+
+const deleteTodo = function() {
+  event.stopPropagation();
+  const [, , todo, task] = event.path;
+  postHttpMsg('/removeTodo', load, `title=${todo.id}`);
+  task.removeChild(todo);
+};
+
 const generateLists = function(list) {
   return list.map(function({ point, status }, index) {
     const getStatus = status ? 'checked' : '';
@@ -107,9 +181,9 @@ const generateLists = function(list) {
   <div id=${index} class="tasks">
     <div>
       <input type="checkbox" ${getStatus}  onclick="done()"/>
-      ${point}
-    </div>
-    <img src="./images/deleteIcon.png" alt="deleteImg" class="delete" onclick="deleteItem()"/>
+      <span>${point}</span>
+      </div>
+      <span class="deleteTask"><img src="./images/delete-sign.png" alt="deleteImg" class="delete" onclick="deleteItem()"/></span>
   </div>`;
   });
 };
@@ -129,68 +203,20 @@ const displayLists = function(index, list, title) {
 const generateHtml = function(html, task, index) {
   const formattedHtml = `
   <div id="d${index}" class="title" onclick="show('#d${index}.listBlock')">
+  <div>
     ${task.title}
-    <img src="./images/deleteIcon.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
+    <img src="./images/delete-forever.png" alt="deleteImg" class="delete" onclick="deleteTodo()"/>
+    </div>
+    <hr />
+    <div class="lists">
+    ${generateLists(task.list).join('')}
+    </div>
   </div>
   <div class="listBlock" id="d${index}">
     ${displayLists(index, task.list, task.title)}
   </div>
   `;
   return formattedHtml + html;
-};
-
-const loadLists = function(text, index) {
-  const tasks = JSON.parse(text);
-  const todoLists = document.querySelector(`#inner${index}.display`)
-    .parentElement;
-  todoLists.innerHTML = displayLists(
-    index,
-    tasks[index].list,
-    tasks[index].title
-  );
-};
-
-const addSubItem = function() {
-  const item = event.target.previousElementSibling.value;
-  const [, , title] = event.path;
-  if (item.trim() === '') {
-    return alert('enter value in the list box to add');
-  }
-  postHttpMsg(
-    '/addSubList',
-    text => loadLists(text, title.id.slice(one)),
-    `title=${title.id.slice(one)}&item=${item}`
-  );
-};
-
-const addList = function() {
-  const enterKeyValue = 13;
-  if (event.keyCode === enterKeyValue) {
-    document.getElementById(event.target.id).nextElementSibling.click();
-  }
-};
-
-const done = function() {
-  const [, , index, , title] = event.path;
-  postHttpMsg(
-    '/changeStatus',
-    text => loadLists(text, title.id.slice(one)),
-    `title=${title.id.slice(one)}&id=${index.id}`
-  );
-};
-
-const deleteItem = function() {
-  const [, index, , title] = event.path;
-  postHttpMsg(
-    '/removeItem',
-    text => loadLists(text, title.id.slice(one)),
-    `title=${title.id.slice(one)}&id=${index.id}`
-  );
-};
-
-const closeTask = function(task) {
-  hide(task);
-  document.querySelector(task).children[0].children[2].value = '';
 };
 
 window.onload = main;

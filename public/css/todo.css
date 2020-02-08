@@ -5,7 +5,8 @@ body {
 }
 /* for overall the images */
 img {
-  height: 25px;
+  width: 15px;
+  padding: 0px;
 }
 /* for the heading*/
 h1 > span {
@@ -26,44 +27,43 @@ input {
 }
 /* division of the todo list in the front page */
 #todo-list {
-  width: 40%;
-  display: inline-block;
   height: 600px;
   overflow: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
 }
 /* each list in the division of the front page */
 .title {
   display: flex;
-  justify-content: space-between;
-  border: 1px solid black;
-  margin-top: 10px;
+  border: 1px solid grey;
+  margin: 10px;
   border-radius: 5px;
   padding: 10px;
   font-weight: bolder;
   font-size: larger;
   word-wrap: break-word;
+  flex-direction: column;
 }
 /* on hover the particular title and particular item becomes little dim */
-.title:hover,
-.tasks:hover {
-  background-color: wheat;
+.title:hover {
+  box-shadow: 0px 0px 5px grey;
 }
-/* on hover the delete option will be visible */
-.title:hover > .delete,
-.tasks:hover > .delete {
-  visibility: visible;
+.tasks:hover {
+  background-color: #eee;
 }
 /* to display the lists in the todo */
 .tasks {
   display: flex;
-  padding-left: 50px;
+  padding-left: 15px;
   justify-content: space-between;
 }
 /* for the delete icon */
 .delete {
-  visibility: hidden;
-  padding: 3px;
+  padding-top: 6px;
   height: 15px;
+  float: right;
 }
 /* for add option in the front page */
 #add {
@@ -125,4 +125,16 @@ p {
 /* for the horizontal line */
 hr {
   padding: 0px;
+  width: 100%;
+}
+.lists {
+  font-weight: 400;
+  font-size: smaller;
+}
+.deleteTask {
+  margin-top: 5px;
+  padding-left: 10px;
+}
+input:checked + span {
+  color: gray;
 }
