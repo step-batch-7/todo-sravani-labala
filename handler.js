@@ -97,6 +97,12 @@ const addSubList = function(req, res) {
   serveTasksList(req, res);
 };
 
+const editTitle = function(req, res) {
+  const { title, value } = req.body;
+  todoLists.editTitle(title, value);
+  serveTasksList(req, res);
+};
+
 const app = new App();
 
 app.use(readBody);
@@ -107,6 +113,9 @@ app.post('/removeItem', removeTodoItem);
 app.post('/removeTodo', removeTodo);
 app.post('/changeStatus', changeStatus);
 app.post('/saveTodo', addNewTodo);
+
+app.post('/editTitle', editTitle);
+
 app.get('', notFound);
 app.use(methodNotAllowed);
 

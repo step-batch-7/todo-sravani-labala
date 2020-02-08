@@ -1,7 +1,4 @@
 const status = { ok: 200 };
-const zero = 0;
-const one = 1;
-const two = 2;
 
 const show = element => {
   document.querySelector(element).style.display = 'block';
@@ -16,6 +13,7 @@ const createList = function() {
   todoList.setAttribute('placeholder', 'task...');
   todoList.setAttribute('name', 'list');
   todoList.setAttribute('type', 'text');
+  todoList.setAttribute('autocomplete', 'off');
   return todoList;
 };
 
@@ -102,19 +100,19 @@ const done = function() {
   postHttpMsg(
     '/changeStatus',
     text => {
-      loadLists(text, title.id.slice(one));
-      if (title.classList[zero] === 'title') {
+      loadLists(text, title.id.slice(1));
+      if (title.classList[0] === 'title') {
         load(text);
       }
     },
-    `title=${title.id.slice(one)}&id=${index.id}`
+    `title=${title.id.slice(1)}&id=${index.id}`
   );
 };
 
 const closeTask = function(task) {
   hide(task);
   main();
-  document.querySelector(task).children[zero].children[two].value = '';
+  document.querySelector(task).children[0].children[2].value = '';
 };
 
 const deleteItem = function() {
@@ -123,12 +121,12 @@ const deleteItem = function() {
   postHttpMsg(
     '/removeItem',
     text => {
-      loadLists(text, title.id.slice(one));
-      if (title.classList[zero] === 'title') {
+      loadLists(text, title.id.slice(1));
+      if (title.classList[0] === 'title') {
         load(text);
       }
     },
-    `title=${title.id.slice(one)}&id=${index.id}`
+    `title=${title.id.slice(1)}&id=${index.id}`
   );
 };
 
@@ -142,12 +140,12 @@ const addSubItem = function() {
   postHttpMsg(
     '/addSubList',
     text => {
-      loadLists(text, title.id.slice(one));
-      if (title.classList[zero] === 'title') {
+      loadLists(text, title.id.slice(1));
+      if (title.classList[0] === 'title') {
         load(text);
       }
     },
-    `title=${title.id.slice(one)}&item=${item}`
+    `title=${title.id.slice(1)}&item=${item}`
   );
 };
 
@@ -183,7 +181,7 @@ const generateLists = function(list) {
   <div id=${index} class="tasks">
     <div>
       <input type="checkbox" ${getStatus}  onclick="done()"/>
-      <span>${point}</span>
+      <span class="tasks-search"  id="s${index}">${point}</span>
       </div>
       <span class="deleteTask"><img src="./images/delete-sign.png" alt="deleteImg" class="delete" onclick="deleteItem()"/></span>
   </div>`;
@@ -193,8 +191,8 @@ const generateLists = function(list) {
 const displayLists = function(index, list, title) {
   return `
 <div class="display" id="inner${index}" >
-  <p><b>${title}</b>
-  <span onclick="closeTask('#d${index}.listBlock')" class="close">&#10008;</span></p>
+  <input value=${title} class="contentTitle" onkeypress="content()" >
+  <span onclick="closeTask('#d${index}.listBlock')" class="close">&#10008;</span></input>
   <hr/>
   <input placeholder="task..." name="subList" type="text" onkeypress="addList()" id="i${index}">
   <img src="./images/plus.png" alt="addImg" onclick="addSubItem()"/>
@@ -222,12 +220,29 @@ const generateHtml = function(html, task, index) {
 };
 
 const search = function() {
-  document.querySelectorAll('.title').forEach(title => {
-    title.style.display = 'none';
-    if (title.children[zero].innerText.includes(event.target.value)) {
-      title.style.display = 'block';
-    }
-  });
+  if (document.getElementById('select').value === 'title') {
+    document.querySelectorAll('.title').forEach(title => {
+      title.style.display = 'none';
+      if (title.children[0].innerText.includes(event.target.value)) {
+        title.style.display = 'block';
+      }
+    });
+  }
+};
+
+const content = function() {
+  if (event.keyCode === 13) {
+    const title = event.target.parentElement.id.slice(5);
+    postHttpMsg(
+      '/editTitle',
+      text => {
+        loadLists(text, title);
+      },
+      `title=${event.target.parentElement.id.slice(5)}&value=${
+        event.target.value
+      }`
+    );
+  }
 };
 
 window.onload = main;

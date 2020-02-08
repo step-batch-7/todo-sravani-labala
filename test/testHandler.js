@@ -36,6 +36,15 @@ describe('POST method', function() {
       )
       .expect(200, done);
   });
+  it('should be able to rename the title', function(done) {
+    request(app.serve.bind(app))
+      .post('/editTitle')
+      .send('title=0&value=something')
+      .expect(
+        '[{"title":"something","list":[{"point":"something","status":false}]}]'
+      )
+      .expect(200, done);
+  });
   it('should delete the particular task ', function(done) {
     request(app.serve.bind(app))
       .post('/removeTodo')

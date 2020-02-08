@@ -83,7 +83,8 @@
       "rules": {
         "max-len": "off",
         "no-undef": "off",
-        "no-unused-vars": "off"
+        "no-unused-vars": "off",
+        "no-magic-numbers": "off"
       }
     },
     {

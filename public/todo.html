@@ -14,19 +14,33 @@
       add todo
     </button>
     <br />
-    <input
-      type="search"
-      oninput="search()"
-      placeholder="search here"
-      id="search"
-    />
+    <div id="search">
+      <input
+        type="search"
+        oninput="search()"
+        placeholder="search here"
+      /><select id="select"
+        ><option>title</option
+        ><option>task</option></select
+      >
+    </div>
     <div>
       <div id="addTodo" class="listBlock">
         <div class="display">
           <p onclick="cancel()" class="close">&#10008;</p>
           <div id="form">
-            <input placeholder="title" name="title" type="text" />
-            <input placeholder="task..." name="list" type="text" />
+            <input
+              placeholder="title"
+              name="title"
+              type="text"
+              autocomplete="off"
+            />
+            <input
+              placeholder="task..."
+              name="list"
+              type="text"
+              autocomplete="off"
+            />
           </div>
           <button onclick="saveList()">
             <img src="./images/tick.png" alt="doneImg" />

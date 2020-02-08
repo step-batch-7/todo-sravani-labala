@@ -47,7 +47,7 @@ input {
   font-size: larger;
   word-wrap: break-word;
   flex-direction: column;
-  width: 200px;
+  width: 300px;
 }
 
 /* on hover the particular title and particular item becomes little dim */
@@ -134,6 +134,8 @@ hr {
 .lists {
   font-weight: 400;
   font-size: smaller;
+  height: 100px;
+  overflow: scroll;
 }
 .deleteTask {
   margin-top: 5px;
@@ -144,8 +146,17 @@ input:checked + span {
 }
 #search {
   float: right;
-  width: 150px;
 }
-#search:focus {
+#search > input {
+  width: 100px;
+}
+#search > input:focus {
   width: 200px;
+}
+.contentTitle {
+  border: none;
+  outline: none;
+  background-color: whitesmoke;
+  font-weight: bold;
+  float: left;
 }
