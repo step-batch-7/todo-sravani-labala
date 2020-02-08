@@ -1,5 +1,7 @@
 const status = { ok: 200 };
+const zero = 0;
 const one = 1;
+const two = 2;
 
 const show = element => {
   document.querySelector(element).style.display = 'block';
@@ -101,7 +103,7 @@ const done = function() {
     '/changeStatus',
     text => {
       loadLists(text, title.id.slice(one));
-      if (title.classList[0] === 'title') {
+      if (title.classList[zero] === 'title') {
         load(text);
       }
     },
@@ -112,7 +114,7 @@ const done = function() {
 const closeTask = function(task) {
   hide(task);
   main();
-  document.querySelector(task).children[0].children[2].value = '';
+  document.querySelector(task).children[zero].children[two].value = '';
 };
 
 const deleteItem = function() {
@@ -122,7 +124,7 @@ const deleteItem = function() {
     '/removeItem',
     text => {
       loadLists(text, title.id.slice(one));
-      if (title.classList[0] === 'title') {
+      if (title.classList[zero] === 'title') {
         load(text);
       }
     },
@@ -141,7 +143,7 @@ const addSubItem = function() {
     '/addSubList',
     text => {
       loadLists(text, title.id.slice(one));
-      if (title.classList[0] === 'title') {
+      if (title.classList[zero] === 'title') {
         load(text);
       }
     },
@@ -217,6 +219,15 @@ const generateHtml = function(html, task, index) {
   </div>
   `;
   return formattedHtml + html;
+};
+
+const search = function() {
+  document.querySelectorAll('.title').forEach(title => {
+    title.style.display = 'none';
+    if (title.children[zero].innerText.includes(event.target.value)) {
+      title.style.display = 'block';
+    }
+  });
 };
 
 window.onload = main;

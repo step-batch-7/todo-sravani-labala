@@ -33,7 +33,7 @@ input {
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
 }
 /* each list in the division of the front page */
@@ -141,4 +141,11 @@ hr {
 }
 input:checked + span {
   color: gray;
+}
+#search {
+  float: right;
+  width: 150px;
+}
+#search:focus {
+  width: 200px;
 }
