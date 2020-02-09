@@ -174,7 +174,7 @@ const deleteTodo = function() {
   task.removeChild(todo);
 };
 
-const generateLists = function(list) {
+const getLists = function(list) {
   return list.map(function({ point, status }, index) {
     const getStatus = status ? 'checked' : '';
     return `
@@ -188,10 +188,24 @@ const generateLists = function(list) {
   });
 };
 
+const generateLists = function(list) {
+  return list.map(function({ point, status }, index) {
+    const getStatus = status ? 'checked' : '';
+    return `
+  <div id=${index} class="tasks">
+    <div style="display:flex">
+      <input type="checkbox" ${getStatus}  onclick="done()" style="margin-top:7px"/>
+      <input value="${point}" class="contentTitle" onkeypress="editItem()"></input>
+      </div>
+      <span class="deleteTask"><img src="./images/delete-sign.png" alt="deleteImg" class="delete" onclick="deleteItem()"/></span>
+  </div>`;
+  });
+};
+
 const displayLists = function(index, list, title) {
   return `
 <div class="display" id="inner${index}" >
-  <input value=${title} class="contentTitle" onkeypress="content()" >
+  <input value="${title}" class="contentTitle" onkeypress="editTitle()" >
   <span onclick="closeTask('#d${index}.listBlock')" class="close">&#10008;</span></input>
   <hr/>
   <input placeholder="task..." name="subList" type="text" onkeypress="addList()" id="i${index}">
@@ -209,7 +223,7 @@ const generateHtml = function(html, task, index) {
     </div>
     <hr />
     <div class="lists">
-    ${generateLists(task.list).join('')}
+    ${getLists(task.list).join('')}
     </div>
   </div>
   <div class="listBlock" id="d${index}">
@@ -230,7 +244,7 @@ const search = function() {
   }
 };
 
-const content = function() {
+const editTitle = function() {
   if (event.keyCode === 13) {
     const title = event.target.parentElement.id.slice(5);
     postHttpMsg(
@@ -241,6 +255,21 @@ const content = function() {
       `title=${event.target.parentElement.id.slice(5)}&value=${
         event.target.value
       }`
+    );
+  }
+};
+
+const editItem = function() {
+  if (event.keyCode === 13) {
+    const [, , item, title] = event.path;
+    const value = event.target.value.trim();
+    postHttpMsg(
+      '/editItem',
+      text => {
+        loadLists(text, title.id.slice(5));
+      },
+      `title=${title.id.slice(5)}&value=${value}/
+      &itemId=${item.id}`
     );
   }
 };

@@ -103,6 +103,12 @@ const editTitle = function(req, res) {
   serveTasksList(req, res);
 };
 
+const editItem = function(req, res) {
+  const { title, itemId, value } = req.body;
+  todoLists.editItem(title, itemId, value);
+  serveTasksList(req, res);
+};
+
 const app = new App();
 
 app.use(readBody);
@@ -115,6 +121,7 @@ app.post('/changeStatus', changeStatus);
 app.post('/saveTodo', addNewTodo);
 
 app.post('/editTitle', editTitle);
+app.post('/editItem', editItem);
 
 app.get('', notFound);
 app.use(methodNotAllowed);
