@@ -49,7 +49,6 @@ input {
   flex-direction: column;
   width: 300px;
 }
-
 /* on hover the particular title and particular item becomes little dim */
 .title:hover {
   box-shadow: 0px 0px 5px grey;
@@ -63,11 +62,20 @@ input {
   padding-left: 15px;
   justify-content: space-between;
 }
+/* on hover the delete icon for the todo will be visible */
+.title:hover > div > .delete {
+  visibility: visible;
+}
+/* on hover the delete icon for each task will appear */
+.tasks:hover > span > .delete {
+  visibility: visible;
+}
 /* for the delete icon */
 .delete {
   padding-top: 6px;
   height: 15px;
   float: right;
+  visibility: hidden;
 }
 /* for add option in the front page */
 #add {
@@ -131,28 +139,35 @@ hr {
   padding: 0px;
   width: 100%;
 }
+/* to display all the lists in the task */
 .lists {
   font-weight: 400;
   font-size: smaller;
   height: 100px;
   overflow: scroll;
 }
+/* delete icon for each task */
 .deleteTask {
   margin-top: 5px;
   padding-left: 10px;
 }
+/* for the checked todo's */
 input:checked + span {
   color: gray;
 }
+/* for the search bar along with the options */
 #search {
   float: right;
 }
+/* for the input search bar width in the search div */
 #search > input {
   width: 100px;
 }
+/* when the cursor will point to it ,the width will increase */
 #search > input:focus {
   width: 200px;
 }
+/* for the heading title */
 .contentTitle {
   border: none;
   outline: none;
