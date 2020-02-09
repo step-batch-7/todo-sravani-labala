@@ -279,7 +279,7 @@ const editItem = function() {
       text => {
         loadLists(text, title.id.slice(5));
       },
-      `title=${title.id.slice(5)}&value=${value}/
+      `title=${title.id.slice(5)}&value=${value.replaceAll('/$', '')}/
       &itemId=${item.id}`
     );
   }
