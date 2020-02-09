@@ -174,20 +174,6 @@ const deleteTodo = function() {
   task.removeChild(todo);
 };
 
-const getLists = function(list) {
-  return list.map(function({ point, status }, index) {
-    const getStatus = status ? 'checked' : '';
-    return `
-  <div id=${index} class="tasks">
-    <div>
-      <input type="checkbox" ${getStatus}  onclick="done()"/>
-      <span class="tasks-search"  id="s${index}">${point}</span>
-      </div>
-      <span class="deleteTask"><img src="./images/delete-sign.png" alt="deleteImg" class="delete" onclick="deleteItem()"/></span>
-  </div>`;
-  });
-};
-
 const generateLists = function(list) {
   return list.map(function({ point, status }, index) {
     const getStatus = status ? 'checked' : '';
@@ -214,6 +200,20 @@ const displayLists = function(index, list, title) {
 </div>`;
 };
 
+const getLists = function(list, title) {
+  return list.map(function({ point, status }, index) {
+    const getStatus = status ? 'checked' : '';
+    return `
+  <div id=${index} class="tasks">
+    <div>
+      <input type="checkbox" ${getStatus}  onclick="done()"/>
+      <span class="tasks-search"  id="d${title}i${index}">${point}</span>
+      </div>
+      <span class="deleteTask"><img src="./images/delete-sign.png" alt="deleteImg" class="delete" onclick="deleteItem()"/></span>
+  </div>`;
+  });
+};
+
 const generateHtml = function(html, task, index) {
   const formattedHtml = `
   <div id="d${index}" class="title" onclick="show('#d${index}.listBlock')">
@@ -223,7 +223,7 @@ const generateHtml = function(html, task, index) {
     </div>
     <hr />
     <div class="lists">
-    ${getLists(task.list).join('')}
+    ${getLists(task.list, index).join('')}
     </div>
   </div>
   <div class="listBlock" id="d${index}">
@@ -241,7 +241,18 @@ const search = function() {
         title.style.display = 'block';
       }
     });
+    return;
   }
+  const lists = new Array(document.querySelectorAll('.tasks-search'));
+  lists[0].forEach(list => {
+    const [title, id] = list.id.split('i');
+    document.getElementById(title).style.display = 'none';
+    if (
+      document.getElementById(list.id).innerText.includes(event.target.value)
+    ) {
+      document.getElementById(title).style.display = 'block';
+    }
+  });
 };
 
 const editTitle = function() {

@@ -154,6 +154,7 @@ hr {
 /* for the checked todo's */
 input:checked + span {
   color: gray;
+  text-decoration: line-through;
 }
 /* for the search bar along with the options */
 #search {
