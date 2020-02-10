@@ -273,13 +273,13 @@ const editTitle = function() {
 const editItem = function() {
   if (event.keyCode === 13) {
     const [, , item, title] = event.path;
-    const value = event.target.value.trim();
+    const value = event.target.value;
     postHttpMsg(
       '/editItem',
       text => {
         loadLists(text, title.id.slice(5));
       },
-      `title=${title.id.slice(5)}&value=${value.replaceAll('/$', '')}/
+      `title=${title.id.slice(5)}&value=${value}
       &itemId=${item.id}`
     );
   }
